@@ -35,6 +35,5 @@ tmp/
 *.gif
 *.svg
 
-# Ensure docs folder is included
-!docs/
-!docs/**
+# Documentation
+docs/
