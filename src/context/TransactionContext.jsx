@@ -6,6 +6,8 @@ const TransactionContext = createContext();
 const initialState = {
   transactions: JSON.parse(localStorage.getItem('transactions')) || initialData,
   role: 'admin',
+  isFormOpen: false,
+  editingItem: null,
 };
 
 function transactionReducer(state, action) {
@@ -38,6 +40,12 @@ function transactionReducer(state, action) {
     }
     case 'SET_ROLE': {
       return { ...state, role: action.payload };
+    }
+    case 'OPEN_FORM': {
+      return { ...state, isFormOpen: true, editingItem: action.payload || null };
+    }
+    case 'CLOSE_FORM': {
+      return { ...state, isFormOpen: false, editingItem: null };
     }
     default:
       return state;

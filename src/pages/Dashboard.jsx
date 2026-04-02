@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import SummaryCards from '../components/SummaryCards';
 import DashboardCharts from '../components/DashboardCharts';
 import TransactionList from '../components/TransactionList';
-import TransactionForm from '../components/TransactionForm';
 import { useDashboardData } from '../hooks/useDashboardData';
+import { useTransactions } from '../context/TransactionContext';
 import { TrendingUp, Target, CreditCard, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -26,18 +26,7 @@ const InsightCard = ({ title, value, icon: Icon, color, description }) => (
 
 export default function Dashboard() {
   const data = useDashboardData();
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingTransaction, setEditingTransaction] = useState(null);
-
-  const handleEdit = (transaction) => {
-    setEditingTransaction(transaction);
-    setIsFormOpen(true);
-  };
-
-  const handleAdd = () => {
-    setEditingTransaction(null);
-    setIsFormOpen(true);
-  };
+  const { dispatch } = useTransactions();
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -46,9 +35,7 @@ export default function Dashboard() {
           <h1 className="text-3xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
             Global Overview <Sparkles className="text-amber-500" size={24} />
           </h1>
-          <p className="text-gray-500 font-medium">Visualize and manage your financial ecosystem.</p>
-        </div>
-        <div className="flex items-center gap-3">
+          <p className="text-gray-500 font-medium font-bold text-sm tracking-tight opacity-70 italic">Visualize and manage your financial ecosystem.</p>
         </div>
       </header>
 
@@ -91,14 +78,8 @@ export default function Dashboard() {
       </section>
 
       <TransactionList 
-        onEdit={handleEdit} 
-        onAdd={handleAdd} 
-      />
-
-      <TransactionForm 
-        isOpen={isFormOpen} 
-        onClose={() => setIsFormOpen(false)} 
-        editingTransaction={editingTransaction}
+        onEdit={(t) => dispatch({ type: 'OPEN_FORM', payload: t })} 
+        onAdd={() => dispatch({ type: 'OPEN_FORM' })} 
       />
     </div>
   );
